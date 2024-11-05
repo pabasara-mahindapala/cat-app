@@ -1,20 +1,20 @@
-# Welcome to Remix!
+# Cat App
 
-- [Remix Docs](https://remix.run/docs)
+It's an app with a bunch of cats! But it can teach you about how to use the Remix framework.
 
 ## Development
 
-From your terminal:
+From the terminal:
 
 ```sh
 npm run dev
 ```
 
-This starts your app in development mode, rebuilding assets on file changes.
+This starts the app in development mode, rebuilding assets on file changes.
 
 ## Deployment
 
-First, build your app for production:
+First, build the app for production:
 
 ```sh
 npm run build
@@ -26,13 +26,7 @@ Then run the app in production mode:
 npm start
 ```
 
-Now you'll need to pick a host to deploy it to.
+# Learn Remix!
 
-### DIY
-
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `remix build`
-
-- `build/server`
-- `build/client`
+- [Remix Docs](https://remix.run/docs)
+- [Remix Tutorial](https://remix.run/docs/en/main/start/tutorial)

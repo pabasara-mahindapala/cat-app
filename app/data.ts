@@ -102,6 +102,7 @@ export async function deleteCat(id: string) {
     first: "Cat",
     last: "Erpillar",
     twitter: "@caterpillar",
+    notes: "Thinks that he'll become a butterfly one day",
   },
   {
     avatar:
@@ -115,6 +116,7 @@ export async function deleteCat(id: string) {
       "https://cdn2.thecatapi.com/images/a1r.jpg",
     first: "Cat",
     last: "Alyst",
+    notes: "Always starts things",
   },
   {
     avatar:
@@ -142,6 +144,7 @@ export async function deleteCat(id: string) {
     first: "Cat",
     last: "Hedral",
     twitter: "@cathedral",
+    notes: "Very religious",
   },
   {
     avatar:
@@ -163,6 +166,20 @@ export async function deleteCat(id: string) {
     first: "Cat",
     last: "Apult",
     twitter: "@catapult",
+  },
+  {
+    avatar:
+      "https://cdn2.thecatapi.com/images/9ej.jpg",
+    first: "Cat",
+    last: "Erer",
+    twitter: "@caterer",
+    notes: "Brings you food",
+  },
+  {
+    avatar:
+      "https://cdn2.thecatapi.com/images/bcp.jpg",
+    first: "Cat",
+    last: "Heter",
   },
 ].forEach((cat) => {
   fakeCats.create({
