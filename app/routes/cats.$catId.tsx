@@ -1,9 +1,20 @@
-import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { ActionFunctionArgs, json, LoaderFunctionArgs } from "@remix-run/node";
+import { Form, useFetcher, useLoaderData } from "@remix-run/react";
 import type { FunctionComponent } from "react";
 
-import { getCat, type CatRecord } from "../data";
+import { getCat, updateCat, type CatRecord } from "../data";
 import invariant from "tiny-invariant";
+
+export const action = async ({
+  params,
+  request,
+}: ActionFunctionArgs) => {
+  invariant(params.catId, "Missing catId param");
+  const formData = await request.formData();
+  return updateCat(params.catId, {
+    favorite: formData.get("favorite") === "true",
+  });
+};
 
 export const loader = async ({
   params,
@@ -81,21 +92,27 @@ export default function Cat() {
 const Favorite: FunctionComponent<{
   cat: Pick<CatRecord, "favorite">;
 }> = ({ cat }) => {
-  const favorite = cat.favorite;
+  const fetcher = useFetcher();
+  // const favorite = cat.favorite;
+  const favorite = fetcher.formData
+    ? fetcher.formData.get("favorite") === "true"
+    : cat.favorite;
 
   return (
     <Form method="post">
-      <button
-        aria-label={
-          favorite
-            ? "Remove from favorites"
-            : "Add to favorites"
-        }
-        name="favorite"
-        value={favorite ? "false" : "true"}
-      >
-        {favorite ? "★" : "☆"}
-      </button>
+      <fetcher.Form method="post">
+        <button
+          aria-label={
+            favorite
+              ? "Remove from favorites"
+              : "Add to favorites"
+          }
+          name="favorite"
+          value={favorite ? "false" : "true"}
+        >
+          {favorite ? "★" : "☆"}
+        </button>
+      </fetcher.Form>
     </Form>
   );
 };
