@@ -1,17 +1,23 @@
-import { Form } from "@remix-run/react";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
 import type { FunctionComponent } from "react";
 
-import type { CatRecord } from "../data";
+import { getCat, type CatRecord } from "../data";
+import invariant from "tiny-invariant";
+
+export const loader = async ({
+  params,
+}: LoaderFunctionArgs) => {
+  invariant(params.catId, "Missing catId param");
+  const cat = await getCat(params.catId);
+  if (!cat) {
+    throw new Response("Not Found", { status: 404 });
+  }
+  return json({ cat });
+};
 
 export default function Cat() {
-  const cat = {
-    first: "Your",
-    last: "Name",
-    avatar: "https://placecats.com/200/200",
-    twitter: "your_handle",
-    notes: "Some notes",
-    favorite: true,
-  };
+  const { cat } = useLoaderData<typeof loader>();
 
   return (
     <div id="cat">
