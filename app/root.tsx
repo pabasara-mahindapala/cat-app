@@ -1,12 +1,32 @@
+import type { LinksFunction } from "@remix-run/node";
 import {
   Form,
+  json,
+  Link,
   Links,
   Meta,
+  Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 
+import appStylesHref from "./app.css?url";
+import { getCats } from "./data";
+
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: appStylesHref },
+];
+
+export const loader = async () => {
+  const cats = await getCats();
+  return json({ cats });
+};
+
 export default function App() {
+  const { cats } = useLoaderData<typeof loader>();
+
   return (
     <html lang="en">
       <head>
@@ -17,12 +37,12 @@ export default function App() {
       </head>
       <body>
         <div id="sidebar">
-          <h1>Remix Contacts</h1>
+          <h1>Cats</h1>
           <div>
             <Form id="search-form" role="search">
               <input
                 id="q"
-                aria-label="Search contacts"
+                aria-label="Search cats"
                 placeholder="Search"
                 type="search"
                 name="q"
@@ -34,17 +54,35 @@ export default function App() {
             </Form>
           </div>
           <nav>
-            <ul>
-              <li>
-                <a href={`/contacts/1`}>Your Name</a>
-              </li>
-              <li>
-                <a href={`/contacts/2`}>Your Friend</a>
-              </li>
-            </ul>
+            {cats.length ? (
+              <ul>
+                {cats.map((cat) => (
+                  <li key={cat.id}>
+                    <Link to={`cats/${cat.id}`}>
+                      {cat.first || cat.last ? (
+                        <>
+                          {cat.first} {cat.last}
+                        </>
+                      ) : (
+                        <i>No Name</i>
+                      )}{" "}
+                      {cat.favorite ? (
+                        <span>★</span>
+                      ) : null}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>
+                <i>No cats</i>
+              </p>
+            )}
           </nav>
         </div>
-
+        <div id="detail">
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
       </body>

@@ -7,7 +7,7 @@ import { matchSorter } from "match-sorter";
 import sortBy from "sort-by";
 import invariant from "tiny-invariant";
 
-type ContactMutation = {
+type CatMutation = {
   id?: string;
   first?: string;
   last?: string;
@@ -17,7 +17,7 @@ type ContactMutation = {
   favorite?: boolean;
 };
 
-export type ContactRecord = ContactMutation & {
+export type CatRecord = CatMutation & {
   id: string;
   createdAt: string;
 };
@@ -25,74 +25,74 @@ export type ContactRecord = ContactMutation & {
 ////////////////////////////////////////////////////////////////////////////////
 // This is just a fake DB table. In a real app you'd be talking to a real db or
 // fetching from an existing API.
-const fakeContacts = {
-  records: {} as Record<string, ContactRecord>,
+const fakeCats = {
+  records: {} as Record<string, CatRecord>,
 
-  async getAll(): Promise<ContactRecord[]> {
-    return Object.keys(fakeContacts.records)
-      .map((key) => fakeContacts.records[key])
+  async getAll(): Promise<CatRecord[]> {
+    return Object.keys(fakeCats.records)
+      .map((key) => fakeCats.records[key])
       .sort(sortBy("-createdAt", "last"));
   },
 
-  async get(id: string): Promise<ContactRecord | null> {
-    return fakeContacts.records[id] || null;
+  async get(id: string): Promise<CatRecord | null> {
+    return fakeCats.records[id] || null;
   },
 
-  async create(values: ContactMutation): Promise<ContactRecord> {
+  async create(values: CatMutation): Promise<CatRecord> {
     const id = values.id || Math.random().toString(36).substring(2, 9);
     const createdAt = new Date().toISOString();
-    const newContact = { id, createdAt, ...values };
-    fakeContacts.records[id] = newContact;
-    return newContact;
+    const newCat = { id, createdAt, ...values };
+    fakeCats.records[id] = newCat;
+    return newCat;
   },
 
-  async set(id: string, values: ContactMutation): Promise<ContactRecord> {
-    const contact = await fakeContacts.get(id);
-    invariant(contact, `No contact found for ${id}`);
-    const updatedContact = { ...contact, ...values };
-    fakeContacts.records[id] = updatedContact;
-    return updatedContact;
+  async set(id: string, values: CatMutation): Promise<CatRecord> {
+    const cat = await fakeCats.get(id);
+    invariant(cat, `No cat found for ${id}`);
+    const updatedCat = { ...cat, ...values };
+    fakeCats.records[id] = updatedCat;
+    return updatedCat;
   },
 
   destroy(id: string): null {
-    delete fakeContacts.records[id];
+    delete fakeCats.records[id];
     return null;
   },
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Handful of helper functions to be called from route loaders and actions
-export async function getContacts(query?: string | null) {
+export async function getCats(query?: string | null) {
   await new Promise((resolve) => setTimeout(resolve, 500));
-  let contacts = await fakeContacts.getAll();
+  let cats = await fakeCats.getAll();
   if (query) {
-    contacts = matchSorter(contacts, query, {
+    cats = matchSorter(cats, query, {
       keys: ["first", "last"],
     });
   }
-  return contacts.sort(sortBy("last", "createdAt"));
+  return cats.sort(sortBy("last", "createdAt"));
 }
 
-export async function createEmptyContact() {
-  const contact = await fakeContacts.create({});
-  return contact;
+export async function createEmptyCat() {
+  const cat = await fakeCats.create({});
+  return cat;
 }
 
-export async function getContact(id: string) {
-  return fakeContacts.get(id);
+export async function getCat(id: string) {
+  return fakeCats.get(id);
 }
 
-export async function updateContact(id: string, updates: ContactMutation) {
-  const contact = await fakeContacts.get(id);
-  if (!contact) {
-    throw new Error(`No contact found for ${id}`);
+export async function updateCat(id: string, updates: CatMutation) {
+  const cat = await fakeCats.get(id);
+  if (!cat) {
+    throw new Error(`No cat found for ${id}`);
   }
-  await fakeContacts.set(id, { ...contact, ...updates });
-  return contact;
+  await fakeCats.set(id, { ...cat, ...updates });
+  return cat;
 }
 
-export async function deleteContact(id: string) {
-  fakeContacts.destroy(id);
+export async function deleteCat(id: string) {
+  fakeCats.destroy(id);
 }
 
 [
@@ -308,9 +308,9 @@ export async function deleteContact(id: string) {
     last: "Jensen",
     twitter: "@jenseng",
   },
-].forEach((contact) => {
-  fakeContacts.create({
-    ...contact,
-    id: `${contact.first.toLowerCase()}-${contact.last.toLocaleLowerCase()}`,
+].forEach((cat) => {
+  fakeCats.create({
+    ...cat,
+    id: `${cat.first.toLowerCase()}-${cat.last.toLocaleLowerCase()}`,
   });
 });
