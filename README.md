@@ -1,5 +1,7 @@
 # Cat App
 
+![app-image](image.png)
+
 It's an app with a bunch of cats! But it can teach you about how to use the Remix framework.
 
 ## Development
