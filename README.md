@@ -1,6 +1,6 @@
 # Cat App
 
-It's an app with a bunch of cats! But it can teach you about how to use the Remix framework.
+It's an app with a bunch of cats! But it can teach you how to use the Remix framework.
 
 ## Development
 
